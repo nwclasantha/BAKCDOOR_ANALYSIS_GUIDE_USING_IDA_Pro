@@ -1,0 +1,267 @@
+================================================================================
+                    SCREENSHOT CHECKLIST
+            Take These 16 Screenshots Right Now!
+================================================================================
+
+IDA Pro should be opening on your screen now with simple_backdoor_debug.exe
+
+Follow this simple checklist:
+
+================================================================================
+
+HOW TO TAKE A SCREENSHOT:
+1. Press: Windows Key + Shift + S
+2. Click and drag to select the area
+3. Open Paint or Word
+4. Press: Ctrl + V (paste)
+5. Save the file
+
+================================================================================
+
+□ SCREENSHOT 1: Main Interface
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Wait for IDA Pro to finish loading  │
+  │ 2. Wait for auto-analysis (progress    │
+  │    bar at bottom reaches 100%)         │
+  │ 3. Press: Windows+Shift+S              │
+  │ 4. Capture entire IDA window           │
+  │ 5. Save as: 01_IDA_Main_Interface.png  │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 2: Imports Window ⭐ IMPORTANT!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Press: Ctrl + I                     │
+  │ 2. Imports window opens                │
+  │ 3. Look for: WSAStartup, socket,       │
+  │    connect, recv, send, _popen         │
+  │ 4. Press: Windows+Shift+S              │
+  │ 5. Capture the Imports window          │
+  │ 6. Save as: 02_Imports_Window.png      │
+  │                                        │
+  │ ANNOTATION: Add red boxes around       │
+  │ connect and _popen                     │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 3: Strings Window ⭐ IMPORTANT!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Press: Shift + F12                  │
+  │ 2. Strings window opens                │
+  │ 3. Look for: "Connecting to",          │
+  │    "Received command:", "127.0.0.1"    │
+  │ 4. Press: Windows+Shift+S              │
+  │ 5. Capture the Strings window          │
+  │ 6. Save as: 03_Strings_Window.png      │
+  │                                        │
+  │ ANNOTATION: Highlight suspicious       │
+  │ strings in yellow                      │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 4: Functions List
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Press: Shift + F3                   │
+  │ 2. Functions window opens              │
+  │ 3. Click "Name" column to sort         │
+  │ 4. Look for: establish_connection,     │
+  │    decode_string, install_persistence  │
+  │ 5. Press: Windows+Shift+S              │
+  │ 6. Capture Functions window            │
+  │ 7. Save as: 04_Functions_List.png      │
+  │                                        │
+  │ ANNOTATION: Red boxes around           │
+  │ suspicious function names              │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 5: Graph View Overview ⭐ IMPORTANT!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. In Functions window (Shift+F3)      │
+  │ 2. Double-click: establish_connection  │
+  │ 3. Press: Spacebar (toggle graph view) │
+  │ 4. Press: - (minus) to zoom out        │
+  │ 5. You should see flowchart!           │
+  │ 6. Press: Windows+Shift+S              │
+  │ 7. Capture entire graph                │
+  │ 8. Save as: 05_Graph_View_Overview.png │
+  │                                        │
+  │ ANNOTATION: Circle the loop (arrow     │
+  │ going upward)                          │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 6: WSAStartup Block
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. In graph view of establish_connect  │
+  │ 2. Look for block with "WSAStartup"    │
+  │ 3. Use scroll wheel to zoom in         │
+  │ 4. Capture this block                  │
+  │ 5. Save as: 06_Winsock_Init_Block.png  │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 7: Socket Creation Block
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Look for block with "call socket"   │
+  │ 2. Zoom in on this block               │
+  │ 3. Capture                             │
+  │ 4. Save as: 07_Socket_Creation.png     │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 8: Connect Block ⭐⭐ CRITICAL!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Look for block with "call connect"  │
+  │ 2. This is THE KEY block!              │
+  │ 3. Zoom in on this block               │
+  │ 4. Capture                             │
+  │ 5. Save as: 08_Connect_Block.png       │
+  │                                        │
+  │ ANNOTATION: BIG RED BOX around         │
+  │ "call connect" with label:             │
+  │ "⚠️ OUTBOUND CONNECTION - REVERSE SHELL!"│
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 9: Command Loop Full View ⭐⭐ CRITICAL!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Zoom out to see the loop            │
+  │ 2. Find blocks with: recv, _popen,     │
+  │    send, and arrow going back up       │
+  │ 3. Capture all these blocks            │
+  │ 4. Save as: 09_Command_Loop_Full.png   │
+  │                                        │
+  │ ANNOTATION: Number the blocks 1,2,3,4  │
+  │ Draw arrows showing the loop path      │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 10: recv() Block
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Find block with "call recv"         │
+  │ 2. Zoom in                             │
+  │ 3. Capture                             │
+  │ 4. Save as: 10_Recv_Block.png          │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 11: _popen() Block ⭐⭐ CRITICAL!
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Find block with "call _popen"       │
+  │ 2. This executes commands!             │
+  │ 3. Zoom in on this block               │
+  │ 4. Capture                             │
+  │ 5. Save as: 11_Popen_Execution.png     │
+  │                                        │
+  │ ANNOTATION: BIG RED BOX with label:    │
+  │ "⚠️ EXECUTES COMMANDS - NO VALIDATION!"│
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 12: send() Block
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Find block with "call send"         │
+  │ 2. Zoom in                             │
+  │ 3. Capture                             │
+  │ 4. Save as: 12_Send_Results.png        │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 13: Cross-References Window
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Press: Ctrl + I (Imports)           │
+  │ 2. Scroll to find: _popen              │
+  │ 3. Double-click _popen                 │
+  │ 4. Press: X key                        │
+  │ 5. Cross-references window appears     │
+  │ 6. Capture this window                 │
+  │ 7. Save as: 13_Cross_References.png    │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 14: decode_string XOR Loop
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Press: Shift + F3 (Functions)       │
+  │ 2. Find: decode_string                 │
+  │ 3. Double-click it                     │
+  │ 4. Press: Spacebar (graph view)        │
+  │ 5. Capture the graph                   │
+  │ 6. Save as: 14_Decode_String_XOR.png   │
+  │                                        │
+  │ ANNOTATION: Highlight XOR instruction  │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 15: Hex View (Optional)
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Look at bottom panel (hex view)     │
+  │ 2. Capture it                          │
+  │ 3. Save as: 15_Hex_View_Encoded.png    │
+  └────────────────────────────────────────┘
+
+□ SCREENSHOT 16: Program Flow (Optional)
+  ┌────────────────────────────────────────┐
+  │ STEPS:                                 │
+  │ 1. Navigate to main function           │
+  │ 2. View → Open subviews → Proximity    │
+  │    Browser (if available)              │
+  │ 3. Capture                             │
+  │ 4. Save as: 16_Program_Flow.png        │
+  └────────────────────────────────────────┘
+
+================================================================================
+
+PRIORITY SCREENSHOTS (If Short on Time):
+========================================
+
+If you can only take 5 screenshots, take these:
+
+1. ⭐⭐ Screenshot 2: Imports (Ctrl+I)
+2. ⭐⭐ Screenshot 8: Connect block (shows reverse shell)
+3. ⭐⭐ Screenshot 11: _popen block (shows command execution)
+4. ⭐ Screenshot 3: Strings (Shift+F12)
+5. ⭐ Screenshot 9: Command loop (shows the full malicious flow)
+
+================================================================================
+
+WHERE TO SAVE:
+--------------
+Create folder: C:\Users\nwcla\Desktop\IDA-Py\screenshots\
+Save all screenshots there
+
+================================================================================
+
+AFTER YOU'RE DONE:
+------------------
+1. Check you have all 16 screenshots (or at least the 5 priority ones)
+2. Add annotations (red boxes, labels) using Paint or PowerPoint
+3. Insert into your DOCX document
+4. Follow the placement guide in SCREENSHOT_GUIDE.md
+
+================================================================================
+
+SHORTCUTS REFERENCE:
+====================
+
+Ctrl + I        = Imports window
+Shift + F12     = Strings window
+Shift + F3      = Functions window
+Spacebar        = Toggle graph/text view
+X               = Cross-references
+-               = Zoom out
++               = Zoom in
+Esc             = Go back
+
+Windows+Shift+S = Take screenshot
+
+================================================================================
+
+START NOW! IDA Pro is open on your screen!
+
+Begin with Screenshot 1 (main interface), then work through the list!
+
+Good luck! 📸
+
+================================================================================
