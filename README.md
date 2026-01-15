@@ -1,7 +1,3 @@
-================================================================================
-        IDA PRO MALWARE ANALYSIS DEMONSTRATION GUIDE
-
-
 TABLE OF CONTENTS
 
 1. Introduction and Learning Objectives
