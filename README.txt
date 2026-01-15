@@ -4,6 +4,8 @@
               For MSc Cybersecurity Students
 ================================================================================
 
+
+
 [INSERT TITLE PAGE]
 Course: MSc Cybersecurity - Malware Analysis
 Topic: Static Analysis of Backdoor Malware Using IDA Pro
