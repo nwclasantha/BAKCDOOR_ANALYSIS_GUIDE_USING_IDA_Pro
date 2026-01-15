@@ -13,12 +13,10 @@ TABLE OF CONTENTS
 11. Conclusion and Assessment
 12. Appendix: Quick Reference
 
-================================================================================
+
 SECTION 1: INTRODUCTION
-================================================================================
 
 LEARNING OBJECTIVES
--------------------
 
 By the end of this lab session, students will be able to:
 
@@ -31,7 +29,6 @@ By the end of this lab session, students will be able to:
 • Document indicators of compromise (IOCs)
 
 WHAT WE'RE ANALYZING
---------------------
 
 File Name: simple_backdoor.exe
 Type: Reverse Shell Backdoor
@@ -42,7 +39,6 @@ This sample demonstrates a classic reverse shell pattern used by real-world
 attackers to gain remote access to compromised systems.
 
 SAFETY NOTICE
--------------
 
 ⚠️ WARNING: This is real malware created for educational purposes!
 
@@ -51,12 +47,9 @@ SAFETY NOTICE
 • Do NOT copy malware to personal devices
 • Do NOT run outside supervised environment
 
-================================================================================
 SECTION 2: LAB SETUP
-================================================================================
 
 PREREQUISITES
--------------
 
 Software Required:
 • IDA Pro (Free or Commercial version)
@@ -73,7 +66,6 @@ Network Setup:
 • Use virtual machines if possible
 
 COMPILING THE SAMPLE (INSTRUCTOR ONLY)
----------------------------------------
 
 Before class, compile the sample:
 
@@ -84,12 +76,9 @@ Before class, compile the sample:
 
 Alternative: Use the provided compile.bat script
 
-================================================================================
 SECTION 3: LOADING THE BINARY IN IDA PRO
-================================================================================
 
 STEP 3.1: LAUNCH IDA PRO
-------------------------
 
 1. Navigate to: D:\Forensics\
 2. Double-click: ida.exe (or ida64.exe for 64-bit analysis)
@@ -113,14 +102,12 @@ Method 2: Drag and Drop
 Caption: Figure 2 - File open dialog in IDA Pro
 
 STEP 3.3: SELECT THE FILE
---------------------------
 
 1. In the file browser, navigate to: C:\Users\nwcla\Desktop\IDA-Py\
 2. Select: simple_backdoor.exe
 3. Click: "Open" button
 
 STEP 3.4: CONFIGURE ANALYSIS OPTIONS
--------------------------------------
 
 A dialog appears asking about the file type:
 
@@ -139,7 +126,6 @@ Click: "OK" to proceed
 Caption: Figure 3 - File load options dialog
 
 STEP 3.5: WAIT FOR AUTO-ANALYSIS
----------------------------------
 
 IDA Pro will now analyze the binary automatically.
 
@@ -161,7 +147,6 @@ Progress indicator:
 Caption: Figure 4 - Auto-analysis progress indicator
 
 STEP 3.6: FAMILIARIZE WITH THE INTERFACE
------------------------------------------
 
 Once loaded, you'll see the main IDA Pro interface:
 
@@ -209,12 +194,9 @@ Check these indicators:
 
 If any issues, restart IDA Pro and try again.
 
-================================================================================
 SECTION 4: IMPORT ANALYSIS - FINDING SUSPICIOUS APIs
-================================================================================
 
 CONCEPT: WHAT ARE IMPORTS?
----------------------------
 
 Imports are external functions that a program uses from Windows DLLs.
 By examining imports, we can understand a program's capabilities:
@@ -246,7 +228,6 @@ Caption: Figure 6 - Opening the Imports window (View menu)
 Caption: Figure 7 - Complete Imports window showing all imported functions
 
 STEP 4.2: UNDERSTAND THE IMPORTS WINDOW LAYOUT
------------------------------------------------
 
 The Imports window has columns:
 
@@ -262,10 +243,8 @@ Functions are grouped by DLL:
 • advapi32.dll - Advanced Windows API (registry, services)
 
 STEP 4.3: IDENTIFY SUSPICIOUS IMPORTS
---------------------------------------
 
 🚩 RED FLAG CATEGORY 1: NETWORKING FUNCTIONS
----------------------------------------------
 
 Look for these functions from ws2_32.dll:
 
@@ -296,7 +275,6 @@ Look for these functions from ws2_32.dll:
   → Not suspicious, just cleanup
 
 🚩 RED FLAG CATEGORY 2: COMMAND EXECUTION
-------------------------------------------
 
 Look for these functions:
 
@@ -340,7 +318,6 @@ Look for these functions:
   → May copy itself to system directories
 
 🚩 RED FLAG CATEGORY 4: ANTI-ANALYSIS
---------------------------------------
 
 ✗ IsDebuggerPresent (from kernel32.dll)
   → Detects if debugger is attached
@@ -371,7 +348,6 @@ FROM msvcrt.dll or kernel32.dll (Execution):
 ☑ _popen - Found ← COMMAND EXECUTION!
 
 ANALYSIS:
---------
 
 The combination of:
 1. Network initialization (WSAStartup)
@@ -395,12 +371,10 @@ ANNOTATION: In your screenshot, use red boxes around:
 Add labels: "OUTBOUND CONNECTION!" and "COMMAND EXECUTION!"
 
 STEP 4.5: DOCUMENT YOUR FINDINGS
----------------------------------
 
 Start building your malware analysis report:
 
 IOC #1: Suspicious Import Combination
-======================================
 
 DLL: ws2_32.dll
 Functions: WSAStartup, socket, connect, send, recv
@@ -413,7 +387,7 @@ Analysis: Shell command execution capability
 Risk Level: CRITICAL (can execute any command)
 
 Combined Assessment:
--------------------
+
 The presence of connect() + _popen() is a definitive indicator of backdoor
 functionality. The malware can connect to a remote server, receive commands,
 and execute them with the privileges of the current user.
@@ -422,7 +396,6 @@ Backdoor Type: Reverse Shell
 Confidence: Very High (>95%)
 
 STEP 4.6: STUDENT EXERCISE
----------------------------
 
 Questions for students:
 
@@ -443,12 +416,9 @@ Questions for students:
 
 [Allow 5 minutes for students to answer]
 
-================================================================================
 SECTION 5: STRING ANALYSIS - FINDING EVIDENCE
-================================================================================
 
 CONCEPT: WHY STRING ANALYSIS?
-------------------------------
 
 Strings in a binary can reveal:
 • IP addresses and URLs
@@ -461,7 +431,6 @@ Strings in a binary can reveal:
 Malware often contains suspicious strings that give away its purpose.
 
 STEP 5.1: OPEN THE STRINGS WINDOW
-----------------------------------
 
 Method 1 (Keyboard - Recommended):
 • Press: Shift + F12
@@ -475,7 +444,6 @@ The Strings window will open showing all text strings found in the binary.
 Caption: Figure 9 - Strings window showing all text strings in the binary
 
 STEP 5.2: UNDERSTAND THE STRINGS WINDOW
-----------------------------------------
 
 Columns in the Strings window:
 
@@ -490,10 +458,9 @@ You can:
 • Filter by type or length
 
 STEP 5.3: LOOK FOR SUSPICIOUS STRING PATTERNS
-----------------------------------------------
+
 
 🔍 PATTERN 1: NETWORK INDICATORS
----------------------------------
 
 IP Addresses:
 • xxx.xxx.xxx.xxx format
@@ -515,7 +482,6 @@ Ports:
 • But can be any port
 
 🔍 PATTERN 2: COMMAND EXECUTION INDICATORS
--------------------------------------------
 
 Command Keywords:
 • "cmd", "cmd.exe", "command.com"
@@ -534,7 +500,6 @@ Exit/Control Keywords:
 • Commands to terminate the backdoor
 
 🔍 PATTERN 3: FUNCTIONAL STRINGS
----------------------------------
 
 Status Messages:
 • "Connecting to..."
@@ -555,7 +520,6 @@ Debug Strings:
 • File paths (development environment paths)
 
 🔍 PATTERN 4: OBFUSCATION INDICATORS
--------------------------------------
 
 Encoded Strings:
 • Base64: long strings of A-Z, a-z, 0-9, +, /
@@ -571,7 +535,6 @@ Suspicious Keywords:
 • "key", "password", "secret"
 
 STEP 5.4: ANALYZE OUR SAMPLE'S STRINGS
----------------------------------------
 
 Scroll through the Strings window and identify these:
 
@@ -593,7 +556,6 @@ PROGRAM INFORMATION:
 ☑ "WARNING: This is a sample backdoor..."
 
 ANALYSIS:
---------
 
 The string "Received command: %s" is particularly damning. The %s is a
 format specifier that will be replaced with a string - presumably a command
@@ -616,7 +578,6 @@ ANNOTATION: Highlight these strings in yellow:
 • The IP address "127.0.0.1"
 
 STEP 5.5: CROSS-REFERENCE STRING USAGE
----------------------------------------
 
 Let's see WHERE the suspicious string "Received command:" is used:
 
@@ -643,10 +604,8 @@ This technique is powerful! We can trace from a suspicious string directly to
 the code that implements the malicious functionality.
 
 STEP 5.6: DOCUMENT YOUR FINDINGS
----------------------------------
 
 IOC #2: Suspicious Strings
-===========================
 
 Network Connection Strings:
 • "Initializing Winsock"
@@ -662,7 +621,6 @@ Network Indicators:
 • Default port: 4444 (common backdoor port)
 
 Analysis:
---------
 The strings confirm the import analysis findings. The program clearly:
 1. Establishes network connection to specified IP:port
 2. Receives commands as strings
@@ -695,12 +653,9 @@ Exercise 3: Find evidence of command execution
 
 [Allow 5-7 minutes for students to complete]
 
-================================================================================
 SECTION 6: FUNCTION ANALYSIS
-================================================================================
 
 CONCEPT: FUNCTIONS IN MALWARE
-------------------------------
 
 A function is a reusable block of code. In malware:
 • Function names can reveal purpose (if debug symbols present)
@@ -708,7 +663,6 @@ A function is a reusable block of code. In malware:
 • Malicious functionality is often isolated in specific functions
 
 STEP 6.1: OPEN THE FUNCTIONS WINDOW
-------------------------------------
 
 Method 1 (Keyboard):
 • Press: Shift + F3
@@ -722,7 +676,6 @@ The Functions window lists all functions IDA Pro identified.
 Caption: Figure 12 - Functions window showing all identified functions
 
 STEP 6.2: UNDERSTAND FUNCTION NAMING
--------------------------------------
 
 IDA Pro shows different types of function names:
 
@@ -743,7 +696,6 @@ IDA Pro shows different types of function names:
    • Real malware usually has only these
 
 STEP 6.3: SORT AND SCAN FOR SUSPICIOUS NAMES
----------------------------------------------
 
 1. Click the "Name" column header to sort alphabetically
 2. Scroll through the list
@@ -775,7 +727,6 @@ DATA THEFT TERMS:
 • upload, exfiltrate, send_data
 
 STEP 6.4: ANALYZE OUR SAMPLE'S FUNCTIONS
------------------------------------------
 
 In the Functions window, you should see:
 
@@ -792,7 +743,6 @@ IMPORTED FUNCTIONS:
 ☑ printf, strcpy, etc. (benign utility functions)
 
 ANALYSIS:
----------
 
 establish_connection:
 • Name explicitly states its purpose
@@ -823,7 +773,6 @@ ANNOTATION: Add colored boxes:
 • GREEN box around: check_system_updates (possible decoy)
 
 STEP 6.5: NAVIGATE TO A SUSPICIOUS FUNCTION
---------------------------------------------
 
 Let's examine the main malicious function:
 
@@ -842,7 +791,6 @@ For now, just observe that we can navigate directly to any function.
 We'll analyze the actual code in the next section.
 
 STEP 6.6: CHECK FUNCTION CALL RELATIONSHIPS
---------------------------------------------
 
 Let's see what functions are called:
 
@@ -862,10 +810,8 @@ main → check_system_updates (decoy?)
 Caption: Figure 14 - Main function showing calls to suspicious functions
 
 STEP 6.7: DOCUMENT YOUR FINDINGS
----------------------------------
 
 IOC #3: Suspicious Function Names
-==================================
 
 Function: establish_connection
 Purpose: Main backdoor functionality (based on name)
@@ -885,7 +831,6 @@ Purpose: Unknown (possibly decoy to appear legitimate)
 Risk Level: LOW (likely benign or fake)
 
 Execution Flow:
---------------
 main()
   ├─→ check_system_updates()  [Decoy?]
   ├─→ decode_string()         [Deobfuscate target IP]
@@ -899,7 +844,6 @@ main()
             └─→ send()        [Send results]
 
 STEP 6.8: STUDENT EXERCISE
----------------------------
 
 Exercise: Function Hunt
 
@@ -916,9 +860,7 @@ Exercise: Function Hunt
 
 [Allow 5 minutes]
 
-================================================================================
 SECTION 7: GRAPH VIEW ANALYSIS - VISUAL DETECTION
-================================================================================
 
 This is the MOST IMPORTANT section for understanding malware behavior!
 
